@@ -174,15 +174,24 @@ foreach ($response as $row) {
     let candidateByPos = [];
     let timeout;
 
+    function removeTime(date = new Date()) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+    }
+
     function displayz(date_today) {
         const x = [...election_date.getElementsByTagName('option')];
         dateHolder.innerHTML = x.find(el => el.value == election_date.value).innerHTML;
 
-        const selected_date = new Date(dateHolder.innerHTML).getDay();
-        const todays_date = new Date().getDay();
+        const selected_date = removeTime(new Date(dateHolder.innerHTML)).getTime();
+        const todays_date = removeTime(new Date()).getTime();
+        const condition = selected_date > todays_date || selected_date == todays_date;
 
-        $("#print_winner_button").prop("disabled", selected_date > todays_date || selected_date == todays_date);
-        $("#print_winner_button").prop("hidden", selected_date > todays_date || selected_date == todays_date);
+        $("#print_winner_button").prop("disabled", condition);
+        $("#print_winner_button").prop("hidden", condition);
 
         $.ajax({
             url: '../process/VoteRoutes.php',
