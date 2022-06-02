@@ -693,7 +693,9 @@ $cannot_vote = isset($elec_date[0]['election_date']) ? true : false;
             if (candidate.p_id == id) {
                 votes.push({
                     candidate_id: candidate.id,
-                    positionName: candidate.positionname
+                    positionName: candidate.positionname,
+                    candidateName: `${candidate.lastname.toUpperCase()}, ${candidate.firstname.toUpperCase()}`,
+                    candidateParty: candidate.partyname
                 });
                 if (positionGroup[targetPosition].positionName == candidate.positionname) {
                     alreadyCheckChecker(`check${candidate.id}`, candidate.id)
@@ -721,13 +723,13 @@ $cannot_vote = isset($elec_date[0]['election_date']) ? true : false;
         })
 
         positionGroup.forEach(position => {
-            if (votes.filter((vote) => vote.positionName === position.positionName).length < position.votesAllowed) {
-                for (let i = votes.filter((vote) => vote.positionName === position.positionName).length; i < position.votesAllowed; i++) {
-                    $(`#${position.positionName.replace(/\s/g, '').toLowerCase()}`).append(`
+            // if (votes.filter((vote) => vote.positionName === position.positionName).length < position.votesAllowed) {
+            for (let i = votes.filter((vote) => vote.positionName === position.positionName).length; i < position.votesAllowed; i++) {
+                $(`#${position.positionName.replace(/\s/g, '').toLowerCase()}`).append(`
                         <h6>----UNDERVOTE----</h6>
                     `);
-                }
             }
+            // }
 
         })
     })
